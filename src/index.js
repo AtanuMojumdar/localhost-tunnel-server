@@ -72,11 +72,15 @@ io.on("connection", (socket) => {
     console.log("New Socket Connected With ID:", socket.id);
 
     socket.on("response", (data,headers, requestId) => {
+        let res = null;
         try{
-            // console.log(data);
+            console.log(data);
             
             if (pendingResponses[requestId]) {
-                const res = pendingResponses[requestId];
+                res = pendingResponses[requestId];
+                if(data == "Internal Server Error"){
+                    return res.status(500).send("internal Server Error"); 
+                }
     
                 for (const key in headers) {
                     if (Object.prototype.hasOwnProperty.call(headers, key)) {
@@ -91,17 +95,23 @@ io.on("connection", (socket) => {
         }
         catch(err){
             console.log("route-1 response error")
-            res.status(500).send("internal Server Error"); 
+            return res.status(500).send("internal Server Error"); 
         }
     });
 
     socket.on("responsestatic", (data,headers,requestId) => {
-        try{
+        let res = null;
 
+        try{
             // console.log(data,requestId,headers)
+            console.log(data)
             
             if (pendingResponses[requestId]) {
-                const res = pendingResponses[requestId];
+                res = pendingResponses[requestId];
+                if(data == "Internal Server Error"){
+                    console.log("Yup")
+                    res.status(500).send("internal Server Error"); 
+                }
     
                 for (const key in headers) {
                     if (Object.prototype.hasOwnProperty.call(headers, key)) {
@@ -116,7 +126,7 @@ io.on("connection", (socket) => {
         }
         catch(err){
             console.log("route-2 response error")
-            res.status(500).send("internal Server Error"); 
+            return res.status(500).send("internal Server Error"); 
         }
     });
 
