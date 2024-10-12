@@ -27,6 +27,12 @@ requestEvent.on("requeststatic", (requestId,requestURL) => {
     }
 });
 
+app.get("/health",(req,res)=>{
+    return res.json({
+        message:"ok"
+    })
+})
+
 app.get('/api', (req, res) => { //endpoint
     try{
         console.log("route-1 request")
