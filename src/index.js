@@ -28,7 +28,7 @@ requestEvent.on("requeststatic", (requestId,requestURL) => {
 });
 
 app.get("/health",(req,res)=>{
-    return res.json({
+    return res.status(200).json({
         message:"ok"
     })
 })
@@ -74,7 +74,7 @@ io.on("connection", (socket) => {
     socket.on("response", (data,headers, requestId) => {
         let res = null;
         try{
-            console.log(data);
+            // console.log(data);
             
             if (pendingResponses[requestId]) {
                 res = pendingResponses[requestId];
@@ -104,13 +104,12 @@ io.on("connection", (socket) => {
 
         try{
             // console.log(data,requestId,headers)
-            console.log(data)
+            // console.log(data)
             
             if (pendingResponses[requestId]) {
                 res = pendingResponses[requestId];
                 if(data == "Internal Server Error"){
-                    console.log("Yup")
-                    res.status(500).send("internal Server Error"); 
+                    return res.status(500).send("internal Server Error"); 
                 }
     
                 for (const key in headers) {
